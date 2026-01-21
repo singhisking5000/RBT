@@ -444,6 +444,32 @@ public class RedBlackTree{
   public boolean isRedBlack() {
 	  return false;
   }
+
+  private boolean rule2() // The root is always black
+  {
+    return isBlack(root);
+  }
+
+  private boolean rule4(Node curr) // If a node is red, both of its children must be black
+  {
+    if(!isBlack(curr))
+    {
+      if(curr.left instanceof NilNode && curr.right instanceof NilNode)
+      {
+        return true;
+      }
+      if(isBlack(curr.left) && isBlack(curr.right))
+      {
+        return 
+      }
+    }
+  }
+
+  private boolean rule5() // For each node, all paths from the node to descendant leaves contain the same number of black nodes.
+  {
+
+  }
+
   
   
   //This should return a string of comma separated keys that represents the shortest height path through the tree.
