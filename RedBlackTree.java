@@ -398,7 +398,7 @@ public class RedBlackTree{
   private void printTree(Node root, Trunk prev, boolean isLeft)
   {
       if (root == null) {
-    	  System.out.println(" " + "NIL "+"B");
+    	  // System.out.println(" " + "NIL "+"B");
           return;
       }
 
@@ -442,7 +442,13 @@ public class RedBlackTree{
   // To receive full credit you must explicitly check for each property! You may not assume anything based on the above implementation (which does ensure all these rules are followed)
   // you may wish to add some helper functions here.
   public boolean isRedBlack() {
-	  return false;
+    if (rule2() && rule4(root))
+    {
+      return true;
+    } else
+    {
+      return false;
+    }
   }
 
   private boolean rule2() // The root is always black
@@ -452,22 +458,54 @@ public class RedBlackTree{
 
   private boolean rule4(Node curr) // If a node is red, both of its children must be black
   {
-    if(!isBlack(curr))
+    if (curr == null) 
+      {
+      return true;
+    }
+    if(!isBlack(curr))// Are we red?
     {
-      if(curr.left instanceof NilNode && curr.right instanceof NilNode)
+      // If we reach a leaf, 
+      if(curr.left instanceof NilNode && curr.right instanceof NilNode) 
       {
         return true;
-      }
-      if(isBlack(curr.left) && isBlack(curr.right))
+      } else if(isBlack(curr.left) && isBlack(curr.right))
       {
-        return 
+        return (rule4(curr.left) && rule4(curr.right));
+      } else {
+        return false;
+      }
+    } else {
+      if (!(curr.left instanceof NilNode) && (curr.right instanceof NilNode)) 
+      {
+        return rule4(curr.left);
+      } else if ((curr.left instanceof NilNode) && !(curr.right instanceof NilNode))
+      {
+        return rule4(curr.right);
+      } else if (!(curr.left instanceof NilNode) && !(curr.right instanceof NilNode))
+      {
+        return (rule4(curr.left) && rule4(curr.right));
+      } else {
+        return false;
       }
     }
   }
 
-  private boolean rule5() // For each node, all paths from the node to descendant leaves contain the same number of black nodes.
+  private boolean rule5(Node n) // For each node, all paths from the node to descendant leaves contain the same number of black nodes.
   {
+    return (bHeight(n) == 1);
+  }
+  
+  private int bHeight (Node n)
+  {
+    if (n == null || n instanceof NilNode)
+    {
+      return -1;
+    }
 
+    if (isBlack(n))
+    {
+      return 1 + Math.max(bHeight(n.left), bHeight(n .right));
+    }
   }
 
   
