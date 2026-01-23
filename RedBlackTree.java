@@ -442,7 +442,8 @@ public class RedBlackTree{
   // To receive full credit you must explicitly check for each property! You may not assume anything based on the above implementation (which does ensure all these rules are followed)
   // you may wish to add some helper functions here.
   public boolean isRedBlack() {
-    if (rule2() && rule4(root))
+    System.out.println(rule5(root));
+    if (rule2() && rule4(root) && rule5(root))
     {
       return true;
     } else
@@ -492,19 +493,44 @@ public class RedBlackTree{
 
   private boolean rule5(Node n) // For each node, all paths from the node to descendant leaves contain the same number of black nodes.
   {
-    return (bHeight(n) == 1);
+    if(n == null || n instanceof NilNode)
+    {
+      return true;
+    } else if (isBalanced(n)) 
+    {
+      if(n.left != null || !(n.left instanceof NilNode))
+      {
+        if(n.right != null || !(n.right instanceof NilNode))
+        {
+          return (rule5(n.left) == rule5(n.right));
+        } else
+        {
+          return (rule5(n.left));
+        }
+      } else if (n.left != null || !(n.left instanceof NilNode))
+      {
+        return rule5(n.right);
+      }
+    }  
+    return false;
+  }
+
+  private boolean isBalanced (Node n)
+  {
+    return (bHeight(n.left) == bHeight(n.right));
   }
   
   private int bHeight (Node n)
   {
-    if (n == null || n instanceof NilNode)
+    if (n == null || n instanceof NilNode) // if we reach the end, we do NOT WANT TO COUNT IT
     {
-      return -1;
+      return 0;
     }
-
     if (isBlack(n))
     {
       return 1 + Math.max(bHeight(n.left), bHeight(n .right));
+    } else {
+      return Math.max(bHeight(n.left), bHeight(n.right));
     }
   }
 
