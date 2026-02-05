@@ -441,6 +441,8 @@ public class RedBlackTree{
   // 5 For each node, all paths from the node to descendant leaves contain the same number of black nodes.
   // To receive full credit you must explicitly check for each property! You may not assume anything based on the above implementation (which does ensure all these rules are followed)
   // you may wish to add some helper functions here.
+  
+  // Checks if ALL the rules are met to qualify it as a red black tree
   public boolean isRedBlack() {
     System.out.println(rule5(root));
     if (rule2() && rule4(root) && rule5(root))
@@ -452,7 +454,7 @@ public class RedBlackTree{
     }
   }
 
-  private boolean rule2() // The root is always black
+  private boolean rule2() // The root is always black, pretty simple
   {
     return isBlack(root);
   }
@@ -466,12 +468,12 @@ public class RedBlackTree{
     if(!isBlack(curr))// Are we red?
     {
       // If we reach a leaf, 
-      if(curr.left instanceof NilNode && curr.right instanceof NilNode) 
+      if(curr.left instanceof NilNode && curr.right instanceof NilNode)
       {
         return true;
-      } else if(isBlack(curr.left) && isBlack(curr.right))
+      } else if(isBlack(curr.left) && isBlack(curr.right)) //Are both children black?
       {
-        return (rule4(curr.left) && rule4(curr.right));
+        return (rule4(curr.left) && rule4(curr.right)); //Check them out
       } else {
         return false;
       }
@@ -515,7 +517,7 @@ public class RedBlackTree{
     return false;
   }
 
-  private boolean isBalanced (Node n)
+  private boolean isBalanced (Node n) //Checks the basic balance of the bLACK HEIGHT
   {
     return (bHeight(n.left) == bHeight(n.right));
   }
@@ -534,17 +536,63 @@ public class RedBlackTree{
     }
   }
 
-  
+
+  private int getHeight(Node n)
+    {
+        if(n == null) //If we reach nothing, then we -1 just to keep the height one less as an index kind of variable
+        {
+            return -1;
+        }
+        if(n.left == null && n.right == null) //If we reach a nub, with literally no path, then we reached the end
+        {
+            return 0;
+        }
+
+        return 1 + Math.max(getHeight(n.left), getHeight(n.right));
+    }
   
   //This should return a string of comma separated keys that represents the shortest height path through the tree.
   //Perhaps this would be easier to do with some helper functions?
   public String shortestTruePath() {
-	  return "";
+    String toRet = "";
+    Node temp = root;
+    while(temp != null)
+    {
+      if(temp.left != null) //do we got a left?
+      {
+        if(temp.right != null) //  a right too?
+        {
+          if (getHeight(temp.left) > getHeight(temp.right)) // which ones less
+          {
+            temp = temp.right;
+            toRet += temp.key + ", ";
+          } else {
+            temp = temp.left;
+            toRet += temp.key + ", ";
+          }
+        } else // just a left?
+        {
+          temp = temp.left;
+          toRet += temp.key + ", ";
+        }
+      } else // no left??
+      {
+        if (temp.right != null) // maybe a right, right?
+        {
+          temp = temp.right;
+          toRet += temp.key + ", ";
+        } else // eh idc at this point
+        {
+          break;
+        }
+      }
+    }
+	  return toRet;
   }
   
   //This returns the absolute value of the difference between the real height of the tree and its black height. 
-  public int trueHeightDiff(){
-	  return 0;
+  public int trueHeightDiff() {
+	  return Math.abs(getHeight(root) - bHeight(root)); // do i really explain this?
   }
 }
 

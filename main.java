@@ -15,5 +15,7 @@ public class main {
 
 		tree.printTree();
 		System.out.println(tree.isRedBlack());
+		System.out.println(tree.shortestTruePath());
+		System.out.println(tree.trueHeightDiff());
 	}
 }
